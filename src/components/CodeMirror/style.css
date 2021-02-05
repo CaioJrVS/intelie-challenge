@@ -1,0 +1,8 @@
+.CodeMirror{
+    height: 100% !important;
+    font-family: 'Source Code Pro', monospace !important;
+}
+
+.react-codemirror2{
+    height: 100%;
+}

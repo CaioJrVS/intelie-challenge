@@ -1,9 +1,11 @@
 import React from 'react';
 
+import classes from './Header.module.css'
+
 const header = ()=>{
     return(
-        <div >
-        <h2>Caio's Challenge</h2>
+        <div className={classes.HeaderContainer}>
+        <h2 className={classes.Header}>Caio's Challenge</h2>
         </div>
     )
 }
