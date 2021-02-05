@@ -12,27 +12,18 @@ require('codemirror/mode/javascript/javascript.js');
 
 const codeMirrorResizable = (props) => {
     return (
-        <Resizable
-            style={{ borderBottom: "4px solid lightgreen", minWidth: "100%" }}
-            bounds={'window'}
-            enable={{ top: false, right: false, bottom: true, left: false, topRight: false, topLeft: false, bottomLeft: false, bottomRight: false }}
-            defaultSize={{ width: "100%", height: "300px" }}
-            minHeight={30}
-            maxHeight={'60vh'}
-        >
-            <CodeMirror
-                value={props.code}
-                options={{
-                    mode: 'javascript',
-                    theme: 'monokai',
-                    lineNumbers: true
-                }}
-                onBeforeChange={(editor, data, value) => {
-                    console.log(value.length)
-                    props.getcode(value)
-                }}
-            />
-        </Resizable>
+        <CodeMirror
+            value={props.code}
+            options={{
+                mode: 'javascript',
+                theme: 'monokai',
+                lineNumbers: true
+            }}
+            onBeforeChange={(editor, data, value) => {
+                console.log(value.length)
+                props.getcode(value)
+            }}
+        />
     )
 }
 

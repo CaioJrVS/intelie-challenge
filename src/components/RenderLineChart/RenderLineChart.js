@@ -30,17 +30,11 @@ const renderLineChart = (props)=>{
       ];
 
     return (
-        <Resizable 
-            defaultSize={{ width: "100%", height: 200 }}
-            minWidth={"100%"}
-            enable={"none"}
-        >
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart width={400} height={400} data={data}>
-                    <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                </LineChart>
-            </ResponsiveContainer>
-        </Resizable>
+        <ResponsiveContainer width="100%" height="100%">
+            <LineChart width={400} height={400} data={data}>
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+            </LineChart>
+        </ResponsiveContainer>
     )
 }
 
