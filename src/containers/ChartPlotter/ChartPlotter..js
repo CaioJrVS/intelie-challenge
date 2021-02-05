@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from '../../components/Header/Header'
 import CodeMirror from '../../components/CodeMirror/CodeMirror'
+import RenderLineChart from '../../components/RenderLineChart/RenderLineChart'
 
 class ChartPlotter extends Component {
 
@@ -34,6 +35,7 @@ class ChartPlotter extends Component {
                     code={this.state.codeData}
                     getcode = {this.getCodeData}
                 />
+                <RenderLineChart />
                 <div>Graph Plot Area</div>
                 <div>Generate Chart fixed at the bottom</div>
             </div>
