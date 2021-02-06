@@ -11,6 +11,14 @@ require('codemirror/mode/javascript/javascript.js');
 
 
 const codeMirrorResizable = (props) => {
+
+    const showAlert = ()=>{
+        alert(
+            "It's too much data to be processed only with a front-end"
+        );
+
+    }
+
     return (
         <CodeMirror
             value={props.code}
@@ -20,8 +28,11 @@ const codeMirrorResizable = (props) => {
                 lineNumbers: true
             }}
             onBeforeChange={(editor, data, value) => {
-                console.log(value.length)
-                props.getcode(value)
+                if(value.length > 20000){
+                    showAlert()
+                } else {
+                    props.setcode(value)
+                }
             }}
         />
     )
