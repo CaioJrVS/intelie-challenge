@@ -21,13 +21,14 @@ const isJson= (input)=>{
 const chartData= (input)=>{
     let json = eval("[" + input.split("\n") + "]");
     const [start, stop] = dataInterval(json);
-    console.log("START", start, "STOP", stop);
     const span = intervalTimeSpan(json, start, stop);
-    console.log("SPAN",span);
     const dataEvents = getDataEvents(json,start,stop,span);
     console.log("dataEvents",dataEvents);
     const sortedDataEvents =  sortEvents(dataEvents);
-    console.log(sortedDataEvents)
+    console.log("sortedEvents",sortedDataEvents)
+    const graphData = setGraphData(sortedDataEvents)
+    console.log("graphData", graphData)
+    return graphData
 }
 
 //Function to find the interval between types Start and Stop
@@ -96,7 +97,7 @@ const isInsideInterval = (obj, minTime, maxTime)=>{
 
 //Quicksort the DATA events
 const sortEvents = (events)=>{
-    let dataEventsArray = Object.assign({},events)
+    let dataEvents = Object.assign({},events)
     function quicksort(json, low, high){
         if(low<high){
             let pi = partition (json,low,high)
@@ -123,8 +124,31 @@ const sortEvents = (events)=>{
         json[high] = b
         return(i+1)
     }
-    quicksort(dataEventsArray,0, events.length-1)
-    return dataEventsArray
+    quicksort(dataEvents,0, events.length-1)
+    let arraySortedEvents = Object.keys(dataEvents).map(key =>{return dataEvents[key]})
+    return arraySortedEvents;
+}
+
+const setGraphData = (events)=>{
+    let time = new Date(events[0].timestamp).getMinutes();
+    let graphData = []
+    let dataSetPerTimestamp= {}
+    dataSetPerTimestamp["time"] = time 
+    let [key1, key2] = ["",""]
+    for(let n =0; n < events.length; n++){
+        if( new Date(events[n].timestamp).getMinutes() === time && n < events.length -1 ){
+            key1 = events[n].os + " " +events[n].browser + " min response time"
+            key2 = events[n].os + " " +events[n].browser + " max response time"
+            dataSetPerTimestamp[key1] = events[n].min_response_time
+            dataSetPerTimestamp[key2] = events[n].max_response_time
+        }else{
+            graphData.push(dataSetPerTimestamp)
+            dataSetPerTimestamp={}
+            time = new Date(events[n].timestamp).getMinutes()
+            dataSetPerTimestamp["time"] = time
+        }
+    }
+    return graphData;
 }
 
 export { isJson, chartData };

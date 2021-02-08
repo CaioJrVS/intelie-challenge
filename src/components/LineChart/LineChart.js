@@ -10,8 +10,40 @@ import {
   XAxis,
   Tooltip
 } from 'recharts';
+import { chartData } from '../../data_handling_module/handleData';
 
 const lineChart = (props)=>{
+
+  let lines = null
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  if (props.chartData.length !== 0) {
+    lines = Object.keys(props.chartData[0]).map(
+      (key, i) => {
+        if (i !== 0) {
+          return (
+            <Line
+              name={key}
+              type="monotone"
+              dataKey={key}
+              stroke={getRandomColor()}
+              key={i}
+            />)
+        }
+        return null
+      }
+    )
+  }
+
+  console.log(props.chartData)
 
   const data = [
     {
@@ -59,17 +91,14 @@ const lineChart = (props)=>{
   ]
   return (
     <ResponsiveContainer width="100%" height="100%">
-        <LineChart width={400} height={400} data={data}>
-          <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-          <Legend
-            layout="vertical"
-            verticalAlign="top"
-            align="right"
-          />
-        <Line name="pv of pages" type="monotone" dataKey="pv" stroke="#8884d8" />
-        <Line name="uv of pages" type="monotone" dataKey="uv" stroke="#82ca9d" />
-        <Line name="amt of pages" type="monotone" dataKey="amt" stroke="#82ca9d" />
-        <XAxis dataKey="name" />
+      <LineChart width={400} height={400} data={props.chartData}>
+        <Legend
+          layout="vertical"
+          verticalAlign="top"
+          align="right"
+        />
+        {lines}
+        <XAxis dataKey="time" />
         <YAxis />
         <Tooltip />
         <CartesianGrid strokeDasharray="3 3" />

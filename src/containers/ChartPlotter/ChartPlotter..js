@@ -29,7 +29,7 @@ class ChartPlotter extends Component {
         super(props)
         this.state={
             inputData:'',
-            chartData: {}
+            dataToBePlotted: []
         }
         this.setCodeData= this.setCodeData.bind(this)
         this.handleChartCreation = this.handleChartCreation.bind(this)
@@ -43,12 +43,13 @@ class ChartPlotter extends Component {
     }
 
     handleChartCreation() {
-        console.log("RODOU 1")
         if ( !isJson(this.state.inputData) ) {
             alert("ERROR Input is not in a JSON format")
         }else{
-            console.log("RODOU")
-            chartData(this.state.inputData)
+            let newState = this.state;
+            newState.dataToBePlotted = chartData(newState.inputData)
+            this.setState(newState)
+            console.log(this.state)
         }
     }
 
@@ -67,7 +68,9 @@ class ChartPlotter extends Component {
                         code={this.state.inputData}
                         setcode={this.setCodeData}
                     />
-                    <LineChart />
+                    <LineChart 
+                        chartData = {this.state.dataToBePlotted}
+                    />
                 </SplitterLayout>
                 <div className={classes.DivFixedBottom}>
                     <button className={classes.ButtonGenerateChart} onClick={()=>this.handleChartCreation()}>
