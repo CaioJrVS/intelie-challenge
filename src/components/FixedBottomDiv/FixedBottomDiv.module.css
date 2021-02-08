@@ -1,0 +1,14 @@
+.DivFixedBottom{
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 8vh;
+    width: 100%;
+    background-color: lightgray;
+}
+
+.DivFixedBottom > *{
+    font-family: 'Source Sans Pro', sans-serif;
+}

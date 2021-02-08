@@ -23,11 +23,8 @@ const chartData= (input)=>{
     const [start, stop] = dataInterval(json);
     const span = intervalTimeSpan(json, start, stop);
     const dataEvents = getDataEvents(json,start,stop,span);
-    console.log("dataEvents",dataEvents);
     const sortedDataEvents =  sortEvents(dataEvents);
-    console.log("sortedEvents",sortedDataEvents)
     const graphData = setGraphData(sortedDataEvents)
-    console.log("graphData", graphData)
     return graphData
 }
 
@@ -95,9 +92,11 @@ const isInsideInterval = (obj, minTime, maxTime)=>{
     return false;
 }
 
-//Quicksort the DATA events
+// Sort the DATA events
 const sortEvents = (events)=>{
     let dataEvents = Object.assign({},events)
+
+    //Quicksort algorithm to sort the data by timestamp
     function quicksort(json, low, high){
         if(low<high){
             let pi = partition (json,low,high)
@@ -105,6 +104,7 @@ const sortEvents = (events)=>{
             quicksort(json,pi+1, high)
         }
     }
+
     function partition(json,low,high){
         let pivot = json[high]
         let i = (low-1)
@@ -129,23 +129,58 @@ const sortEvents = (events)=>{
     return arraySortedEvents;
 }
 
+/*
+    Function to set the data structure required by the 
+    Recharts library to plot the line graph data
+    
+    Ex:
+        [
+            {
+                "time": 0,
+                "linux chrome min response time"
+            }
+        ]
+*/
 const setGraphData = (events)=>{
     let time = new Date(events[0].timestamp).getMinutes();
-    let graphData = []
-    let dataSetPerTimestamp= {}
-    dataSetPerTimestamp["time"] = time 
-    let [key1, key2] = ["",""]
+    let graphData = [];
+    let dataSetPerTimestamp= {};
+    dataSetPerTimestamp["time"] = time ;
+    let [key1, key2] = ["",""];
+
+    function insertDataSet(event){
+        key1 = event.os + " " + event.browser + " min response time"
+        key2 = event.os + " " + event.browser + " max response time"
+        dataSetPerTimestamp[key1] = event.min_response_time
+        dataSetPerTimestamp[key2] = event.max_response_time
+    }
+
+    function pushToGraphData(){
+        graphData.push(dataSetPerTimestamp)
+        dataSetPerTimestamp={}
+    }
+
+    function setNewTimeStamp(event){
+        time = new Date(event.timestamp).getMinutes()
+        dataSetPerTimestamp["time"] = time
+    }
+
+    function isSameTimestamp(event){
+        if( new Date(event.timestamp).getMinutes() === time )return true
+        return false
+    }
+
     for(let n =0; n < events.length; n++){
-        if( new Date(events[n].timestamp).getMinutes() === time && n < events.length -1 ){
-            key1 = events[n].os + " " +events[n].browser + " min response time"
-            key2 = events[n].os + " " +events[n].browser + " max response time"
-            dataSetPerTimestamp[key1] = events[n].min_response_time
-            dataSetPerTimestamp[key2] = events[n].max_response_time
+        if(n === events.length -1){
+            insertDataSet(events[n])
+            pushToGraphData()
+        }
+        else if( isSameTimestamp(events[n]) ){
+            insertDataSet(events[n])
         }else{
-            graphData.push(dataSetPerTimestamp)
-            dataSetPerTimestamp={}
-            time = new Date(events[n].timestamp).getMinutes()
-            dataSetPerTimestamp["time"] = time
+            pushToGraphData()
+            setNewTimeStamp(events[n])
+            insertDataSet(events[n])
         }
     }
     return graphData;

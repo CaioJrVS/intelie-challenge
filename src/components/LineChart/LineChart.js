@@ -10,21 +10,16 @@ import {
   XAxis,
   Tooltip
 } from 'recharts';
-import { chartData } from '../../data_handling_module/handleData';
 
 const lineChart = (props)=>{
 
+  // Variable to store the Line components that will represent the 
+  // Lines of the data
   let lines = null
 
-  function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
+  // If data is being passed though props,
+  // the lines variable, will hold all the
+  // components for the lines to be plotted
   if (props.chartData.length !== 0) {
     lines = Object.keys(props.chartData[0]).map(
       (key, i) => {
@@ -36,6 +31,8 @@ const lineChart = (props)=>{
               dataKey={key}
               stroke={getRandomColor()}
               key={i}
+              strokeWidth={2}
+              margin={{top:5,right:20, bottom:5, left:5}}
             />)
         }
         return null
@@ -43,55 +40,20 @@ const lineChart = (props)=>{
     )
   }
 
-  console.log(props.chartData)
-
-  const data = [
-    {
-      "name": "Page A",
-      "uv": 4000,
-      "pv": 2400,
-      "amt": undefined 
-    },
-    {
-      "name": "Page C",
-      "uv": 2000,
-      "pv": 9800,
-      "amt": 2290
-    },
-    {
-      "name": "Page B",
-      "uv": 3000,
-      "pv": 1398,
-      "amt": 2210
-    },
-    {
-      "name": "Page D",
-      "uv": 2780,
-      "pv": 3908,
-      "amt": 2000
-    },
-    {
-      "name": "Page E",
-      "uv": 1890,
-      "pv": 4800,
-      "amt": 2181
-    },
-    {
-      "name": "Page F",
-      "uv": 2390,
-      "pv": 3800,
-      "amt": 2500
-    },
-    {
-      "name": "Page G",
-      "uv": 3490,
-      "pv": 4300,
-      "amt": 2100
+  //Function to generate different collors for the chart
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
-  ]
+    return color;
+  }
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart width={400} height={400} data={props.chartData}>
+    //Recharts library line chart
+    <ResponsiveContainer width="100%" height="98%" maxHeight="100%" maxWidth="100%">
+      <LineChart width={400} height={350} data={props.chartData} margin={{top:5,right:10, bottom:5, left:5}}>
         <Legend
           layout="vertical"
           verticalAlign="top"
