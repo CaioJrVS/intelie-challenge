@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Header from '../../components/Header/Header'
 import CodeMirror from '../../components/CodeMirror/CodeMirror'
-import RenderLineChart from '../../components/RenderLineChart/RenderLineChart'
+import LineChart from '../../components/LineChart/LineChart'
 
 //Component to splitt the chart and the input data
 import SplitterLayout from 'react-splitter-layout';
@@ -13,7 +13,10 @@ import './style.css'
 import classes from './ChartPlotter.module.css'
 
 //Function to test
-import { test } from '../../data_handling_module/handleData'
+import {
+    isJson,
+    chartData
+} from '../../data_handling_module/handleData'
 
 /* 
     This is the main container, it holds the methods used to handle data,
@@ -25,7 +28,8 @@ class ChartPlotter extends Component {
     constructor(props){
         super(props)
         this.state={
-            inputData:''
+            inputData:'',
+            chartData: {}
         }
         this.setCodeData= this.setCodeData.bind(this)
         this.handleChartCreation = this.handleChartCreation.bind(this)
@@ -39,9 +43,13 @@ class ChartPlotter extends Component {
     }
 
     handleChartCreation() {
-        let jsonInput= eval("[" +this.state.inputData.split("\n") + "]")
-        console.log(jsonInput)
-        test(jsonInput);
+        console.log("RODOU 1")
+        if ( !isJson(this.state.inputData) ) {
+            alert("ERROR Input is not in a JSON format")
+        }else{
+            console.log("RODOU")
+            chartData(this.state.inputData)
+        }
     }
 
     render() {
@@ -59,7 +67,7 @@ class ChartPlotter extends Component {
                         code={this.state.inputData}
                         setcode={this.setCodeData}
                     />
-                    <RenderLineChart />
+                    <LineChart />
                 </SplitterLayout>
                 <div className={classes.DivFixedBottom}>
                     <button className={classes.ButtonGenerateChart} onClick={()=>this.handleChartCreation()}>

@@ -10,28 +10,27 @@ import {
   XAxis,
   Tooltip
 } from 'recharts';
-import { Resizable } from 're-resizable'
 
-const renderLineChart = (props)=>{
+const lineChart = (props)=>{
 
   const data = [
     {
       "name": "Page A",
       "uv": 4000,
       "pv": 2400,
-      "amt": 2400
-    },
-    {
-      "name": "Page B",
-      "uv": 3000,
-      "pv": 1398,
-      "amt": 2210
+      "amt": undefined 
     },
     {
       "name": "Page C",
       "uv": 2000,
       "pv": 9800,
       "amt": 2290
+    },
+    {
+      "name": "Page B",
+      "uv": 3000,
+      "pv": 1398,
+      "amt": 2210
     },
     {
       "name": "Page D",
@@ -69,6 +68,7 @@ const renderLineChart = (props)=>{
           />
         <Line name="pv of pages" type="monotone" dataKey="pv" stroke="#8884d8" />
         <Line name="uv of pages" type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line name="amt of pages" type="monotone" dataKey="amt" stroke="#82ca9d" />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
@@ -78,4 +78,4 @@ const renderLineChart = (props)=>{
   )
 }
 
-export default (renderLineChart);
+export default (lineChart);
